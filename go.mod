@@ -1,3 +1,3 @@
 module strongly_connected_components
 
-go 1.19
+go 1.20
