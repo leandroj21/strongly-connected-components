@@ -2,7 +2,6 @@ package src
 
 import (
 	"fmt"
-	"time"
 )
 
 var (
@@ -24,8 +23,30 @@ type Graph struct {
 	Nodes []*Node
 }
 
-func (g *Graph) CreateGraph(lsls []intTuple, rev bool, start time.Time) {
+func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
+	var nodeFrom *Node
+	for _, pair := range pairOfNodesList {
+		from, to := pair[0], pair[1]
+		if reverse {
+			from, to = pair[1], pair[0]
+		}
 
+		// Create the nodes in the graph if they do not exist
+		if g.Nodes[from] == nil {
+			g.Nodes[from] = new(Node)
+			g.Nodes[from].Label = from
+			g.Nodes[from].Previous = -1
+		}
+		nodeFrom = g.Nodes[from]
+		if g.Nodes[to] == nil {
+			g.Nodes[to] = new(Node)
+			g.Nodes[to].Label = to
+			g.Nodes[to].Previous = -1
+		}
+
+		// Append neighbor
+		nodeFrom.Neighbors = append(nodeFrom.Neighbors, to)
+	}
 }
 
 func (g *Graph) Display() {

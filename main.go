@@ -9,7 +9,7 @@ import (
 
 func main() {
 	start := time.Now()
-	name := "./data/SCC.txt"
+	name := "./data/SCC2.txt"
 	if len(os.Args) > 1 {
 		name = "./data/" + os.Args[1]
 	}
@@ -22,7 +22,7 @@ func main() {
 
 	pg := new(src.Graph)
 	pg.Nodes = make([]*src.Node, nr+1)
-	pg.CreateGraph(lisnod, true, start)
+	pg.CreateGraph(lisnod, true)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
@@ -36,7 +36,7 @@ func main() {
 
 	pgr := new(src.Graph)
 	pgr.Nodes = make([]*src.Node, nr+1)
-	pgr.CreateGraph(lisnod, false, start)
+	pgr.CreateGraph(lisnod, false)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
