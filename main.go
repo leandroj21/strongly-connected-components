@@ -9,7 +9,7 @@ import (
 
 func main() {
 	start := time.Now()
-	name := "./data/SCC.txt"
+	name := "./data/SCC2.txt"
 	if len(os.Args) > 1 {
 		name = "./data/" + os.Args[1]
 	}

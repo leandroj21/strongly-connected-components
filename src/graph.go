@@ -5,8 +5,9 @@ import (
 )
 
 var (
-	t    int
-	tree []int
+	t     int
+	tree  []int
+	stack Stack
 )
 
 type intTuple [2]int
@@ -53,7 +54,7 @@ func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
 	}
 }
 
-// Display display the graph in an user-friendly way
+// Display the graph in a user-friendly way
 func (g *Graph) Display() {
 	str, separator := "", ","
 	maxAmountOfDigits := CountDigits(len(g.Nodes))
@@ -75,6 +76,7 @@ func (g *Graph) Display() {
 	}
 }
 
+// Todo: implement reverse DFS
 func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 	if index == 0 {
 		return
@@ -85,7 +87,8 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 		g.Nodes[index].Visited = true
 		g.nodesVisited++
 
-		// Todo: Push to stack
+		// Push to stack
+		stack.Push(index)
 	}
 
 	// Look for the next node
@@ -118,6 +121,9 @@ func (g *Graph) Dfs(reverse bool) {
 			g.depthSearch(idx, false, reverse)
 		}
 	}
+
+	// Todo: is right to clear the stack?
+	stack.Clear()
 }
 
 // Operations
