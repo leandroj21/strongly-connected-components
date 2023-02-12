@@ -48,3 +48,20 @@ func ReadFile(name string, start time.Time) (maxvalue int, nodeList []intTuple) 
 	}
 	return
 }
+
+func abs(num int) int {
+	if num < 0 {
+		num = -1 * num
+	}
+	return num
+}
+
+// CountDigits counts the digits of an int number
+func CountDigits(num int) (count int) {
+	num = abs(num)
+	for num > 0 {
+		num = num / 10
+		count += 1
+	}
+	return
+}

@@ -23,6 +23,7 @@ type Graph struct {
 	Nodes []*Node
 }
 
+// CreateGraph create the graph from a list of pairs of nodes
 func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
 	var nodeFrom *Node
 	for _, pair := range pairOfNodesList {
@@ -49,19 +50,25 @@ func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
 	}
 }
 
+// Display display the graph in an user-friendly way
 func (g *Graph) Display() {
-	s := ""
-	for i := 0; i < len(g.Nodes); i++ {
-		near := g.Nodes[i]
-		if near == nil {
+	str, separator := "", ","
+	maxAmountOfDigits := CountDigits(len(g.Nodes))
+	for _, node := range g.Nodes {
+		if node == nil {
 			continue
 		}
-		s += fmt.Sprintf(" %8d --> ", near.Label)
-		for _, j := range near.Neighbors {
-			s += fmt.Sprintf(" %8d| ", g.Nodes[j].Label)
+
+		str += fmt.Sprintf("%*d --> ", maxAmountOfDigits, node.Label)
+		for index, neighbor := range node.Neighbors {
+			// To not print the final comma
+			if index == len(node.Neighbors)-1 {
+				separator = ""
+			}
+			str += fmt.Sprintf("%*d%s ", maxAmountOfDigits, g.Nodes[neighbor].Label, separator)
 		}
-		fmt.Println(s)
-		s = ""
+		fmt.Println(str)
+		str, separator = "", ","
 	}
 }
 
