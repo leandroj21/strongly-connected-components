@@ -8,12 +8,12 @@ import (
 	"time"
 )
 
-type twoInt [2]int
+type intTuple [2]int
 
 type Node struct {
-	label     int // nombre del nodo
-	visited   int // 0 not visited, -1 gray, 1 visited
-	previo    int // indice a nodo anterior en recorrido
+	label     int
+	visited   int
+	previous  int
 	neighbors []int
 }
 
@@ -43,7 +43,7 @@ func (g *Graph) display() {
 	}
 }
 
-func (pg *Graph) creatGraph(lsls []twoInt, rev bool, start time.Time) {
+func (g *Graph) createGraph(lsls []intTuple, rev bool, start time.Time) {
 
 }
 
@@ -67,22 +67,30 @@ func listTree(pg *Graph) {
 
 }
 
-func readFile(name string, start time.Time) (mxval int, lisnod []twoInt) {
+func readFile(name string, start time.Time) (mxval int, lisnod []intTuple) {
 	file, err := os.Open(name)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			fmt.Println("Some error just happened.")
+		}
+	}(file)
 	scanner := bufio.NewScanner(file)
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	var anod twoInt
+	var anod intTuple
 	var i int
 	var elapsed time.Duration
 	for scanner.Scan() {
 		lineStr := scanner.Text()
-		fmt.Sscanf(lineStr, "%d %d", &anod[0], &anod[1])
+		_, err2 := fmt.Sscanf(lineStr, "%d %d", &anod[0], &anod[1])
+		if err2 != nil {
+			return 0, nil
+		}
 		lisnod = append(lisnod, anod)
 		if mxval < anod[0] {
 			mxval = anod[0]
@@ -114,7 +122,7 @@ func main() {
 
 	pg := new(Graph)
 	pg.nodes = make([]*Node, nr+1)
-	pg.creatGraph(lisnod, true, start)
+	pg.createGraph(lisnod, true, start)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.nodes), elapsed)
 
@@ -128,7 +136,7 @@ func main() {
 
 	pgr := new(Graph)
 	pgr.nodes = make([]*Node, nr+1)
-	pgr.creatGraph(lisnod, false, start)
+	pgr.createGraph(lisnod, false, start)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.nodes), elapsed)
 
