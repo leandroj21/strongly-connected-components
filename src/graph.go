@@ -5,22 +5,29 @@ import (
 )
 
 var (
-	t     int
-	stack []int
-	arbol []int
+	t    int
+	tree []int
 )
 
 type intTuple [2]int
 
 type Node struct {
 	Label     int
-	Visited   int
+	Visited   bool
 	Previous  int
 	Neighbors []int
 }
 
 type Graph struct {
-	Nodes []*Node
+	Nodes        []*Node
+	nodesVisited int
+}
+
+// createNode create a node in the graph
+func (g *Graph) createNode(position int) {
+	g.Nodes[position] = new(Node)
+	// Same label as its position
+	g.Nodes[position].Label = position
 }
 
 // CreateGraph create the graph from a list of pairs of nodes
@@ -34,15 +41,11 @@ func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
 
 		// Create the nodes in the graph if they do not exist
 		if g.Nodes[from] == nil {
-			g.Nodes[from] = new(Node)
-			g.Nodes[from].Label = from
-			g.Nodes[from].Previous = -1
+			g.createNode(from)
 		}
 		nodeFrom = g.Nodes[from]
 		if g.Nodes[to] == nil {
-			g.Nodes[to] = new(Node)
-			g.Nodes[to].Label = to
-			g.Nodes[to].Previous = -1
+			g.createNode(to)
 		}
 
 		// Append neighbor
@@ -72,8 +75,49 @@ func (g *Graph) Display() {
 	}
 }
 
-func (g *Graph) Dfs(rev bool) {
+func (g *Graph) depthSearch(index int, rollback, reverse bool) {
+	if index == 0 {
+		return
+	}
 
+	node := g.Nodes[index]
+	if !rollback {
+		g.Nodes[index].Visited = true
+		g.nodesVisited++
+
+		// Todo: Push to stack
+	}
+
+	// Look for the next node
+	allVisited := true
+	for _, neighbor := range node.Neighbors {
+		if !g.Nodes[neighbor].Visited {
+			allVisited = false
+
+			// Continue to the next node
+			g.Nodes[neighbor].Previous = index
+			g.depthSearch(neighbor, false, reverse)
+		}
+	}
+
+	// Go back to the previous node
+	if allVisited {
+		g.depthSearch(node.Previous, true, reverse)
+	}
+	return
+}
+
+// Dfs Do a DFS of the graph
+func (g *Graph) Dfs(reverse bool) {
+	for idx, node := range g.Nodes {
+		if node == nil {
+			continue
+		}
+
+		if !node.Visited {
+			g.depthSearch(idx, false, reverse)
+		}
+	}
 }
 
 // Operations
