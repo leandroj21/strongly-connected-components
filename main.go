@@ -9,7 +9,7 @@ import (
 
 func main() {
 	start := time.Now()
-	name := "./data/SCC2.txt"
+	name := "./data/SCC4.txt"
 	if len(os.Args) > 1 {
 		name = "./data/" + os.Args[1]
 	}
@@ -26,7 +26,7 @@ func main() {
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
-	//pg.Display()
+	pg.Display()
 
 	pg.Dfs(false)
 	elapsed = time.Since(start)
@@ -40,7 +40,7 @@ func main() {
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
-	//pgr.Display()
+	pgr.Display()
 
 	pgr.Dfs(true)
 	elapsed = time.Since(start)

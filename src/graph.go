@@ -122,15 +122,11 @@ func (g *Graph) Dfs(reverse bool) {
 		}
 	}
 
-	// Todo: is right to clear the stack?
+	// Todo: is it right to clear the stack?
 	stack.Clear()
 }
 
 // Operations
-
-func DfsVisit(g *Graph, i int, u *Node, rev bool) {
-
-}
 
 func ListOrder(pg *Graph) {
 
