@@ -5,19 +5,19 @@ import (
 )
 
 var (
-	timePassed uint = 1
-	tree       []int
-	stack      Stack
+	tree []int
+	// To implement the decreasing order or processing in the algorithm
+	// Todo: operations with stack
+	stack Stack
 )
 
 type intTuple [2]int
 
 type Node struct {
-	Label      int
-	Visited    bool
-	Previous   int
-	Neighbors  []int
-	FinishTime uint
+	Label     int
+	Visited   bool
+	Previous  int
+	Neighbors []int
 }
 
 type Graph struct {
@@ -58,7 +58,7 @@ func (g *Graph) CreateGraph(pairOfNodesList []intTuple, reverse bool) {
 // Display the graph in a user-friendly way
 func (g *Graph) Display() {
 	str, separator := "", ","
-	maxAmountOfDigits := CountDigits(len(g.Nodes))
+	maxAmountOfDigits := CountDigits(len(g.Nodes) - 1)
 	for _, node := range g.Nodes {
 		if node == nil {
 			continue
@@ -83,16 +83,10 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 		return
 	}
 
-	// Increment time passed (number of recursions)
-	timePassed++
-
 	node := g.Nodes[index]
 	if !rollback {
 		g.Nodes[index].Visited = true
 		g.nodesVisited++
-
-		// Push to stack
-		stack.Push(index)
 	}
 
 	// Look for the next node
@@ -109,8 +103,8 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 
 	// Go back to the previous node
 	if allVisited {
-		// Since all neighbors were visited, the finish time is assigned
-		node.FinishTime = timePassed
+		// Push to stack since all neighbors were visited
+		stack.Push(index)
 
 		g.depthSearch(node.Previous, true, reverse)
 	}
@@ -119,11 +113,6 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 
 // Dfs of the graph
 func (g *Graph) Dfs(reverse bool) {
-	// Reset time passed
-	if timePassed != 1 {
-		timePassed = 1
-	}
-
 	for idx, node := range g.Nodes {
 		if node == nil {
 			continue
@@ -133,9 +122,6 @@ func (g *Graph) Dfs(reverse bool) {
 			g.depthSearch(idx, false, reverse)
 		}
 	}
-
-	// Todo: is it right to clear the stack?
-	stack.Clear()
 }
 
 // Operations
