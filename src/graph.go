@@ -5,18 +5,19 @@ import (
 )
 
 var (
-	t     int
-	tree  []int
-	stack Stack
+	timePassed uint = 1
+	tree       []int
+	stack      Stack
 )
 
 type intTuple [2]int
 
 type Node struct {
-	Label     int
-	Visited   bool
-	Previous  int
-	Neighbors []int
+	Label      int
+	Visited    bool
+	Previous   int
+	Neighbors  []int
+	FinishTime uint
 }
 
 type Graph struct {
@@ -82,6 +83,9 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 		return
 	}
 
+	// Increment time passed (number of recursions)
+	timePassed++
+
 	node := g.Nodes[index]
 	if !rollback {
 		g.Nodes[index].Visited = true
@@ -105,13 +109,21 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 
 	// Go back to the previous node
 	if allVisited {
+		// Since all neighbors were visited, the finish time is assigned
+		node.FinishTime = timePassed
+
 		g.depthSearch(node.Previous, true, reverse)
 	}
 	return
 }
 
-// Dfs Do a DFS of the graph
+// Dfs of the graph
 func (g *Graph) Dfs(reverse bool) {
+	// Reset time passed
+	if timePassed != 1 {
+		timePassed = 1
+	}
+
 	for idx, node := range g.Nodes {
 		if node == nil {
 			continue
