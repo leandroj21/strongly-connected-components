@@ -21,10 +21,10 @@ func main() {
 	fmt.Printf("Reading took %s\n", elapsed)
 	fmt.Printf("Input %10d  Edges %10d Nodes\n", len(nodesList), lenght)
 
-	// Create graph G
+	// Create graph G_rev first
 	graph := new(src.Graph)
 	graph.Nodes = make([]*src.Node, lenght+1)
-	graph.CreateGraph(nodesList, false)
+	graph.CreateGraph(nodesList, true)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
 
@@ -32,15 +32,15 @@ func main() {
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)
 
-	// Create reversed graph G_rev
+	// Create reversed graph G
 	reversedGraph := new(src.Graph)
 	reversedGraph.Nodes = make([]*src.Node, lenght+1)
-	reversedGraph.CreateGraph(nodesList, true)
+	reversedGraph.CreateGraph(nodesList, false)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
 
-	// Print SCCs
-	reversedGraph.PrintSCC()
+	// Print max SCCs
+	reversedGraph.PrintMaxSCCs()
 
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)

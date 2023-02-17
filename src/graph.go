@@ -4,13 +4,15 @@ import (
 	"fmt"
 )
 
-var (
-	tree          []int
-	stack         Stack
-	numComponents int
-)
-
 type intTuple [2]int
+
+var (
+	count      uint
+	maxFiveSCC [5]uint
+	// [index, value]
+	minimumSCC [2]uint = [2]uint{0, 0}
+	stack      Stack
+)
 
 type Node struct {
 	Label     int
@@ -76,7 +78,45 @@ func (g *Graph) Display() {
 	}
 }
 
-// Todo: implement reverse DFS
+// insertPathLength in the five-elements array to save the max SCC
+func insertPathLength(count uint) {
+	if count > minimumSCC[1] {
+		maxFiveSCC[minimumSCC[0]] = count
+
+		// Update minimum
+		minimumSCC = [2]uint{0, maxFiveSCC[0]}
+		for idx, v := range maxFiveSCC {
+			if v < minimumSCC[1] {
+				minimumSCC = [2]uint{uint(idx), v}
+			}
+		}
+	}
+
+	//assigned := false
+	//for idx, v := range maxFiveSCC {
+	//	if idx == 0 {
+	//		if count > v && count >= maxFiveSCC[1] {
+	//			maxFiveSCC[0] = count
+	//			assigned = true
+	//		}
+	//	} else if idx == len(maxFiveSCC)-1 {
+	//		if count > v {
+	//			maxFiveSCC[len(maxFiveSCC)-1] = count
+	//			assigned = true
+	//		}
+	//	} else {
+	//		if count > v && count <= maxFiveSCC[idx-1] && count >= maxFiveSCC[idx+1] {
+	//			maxFiveSCC[idx] = count
+	//			assigned = true
+	//		}
+	//	}
+	//
+	//	if assigned {
+	//		break
+	//	}
+	//}
+}
+
 func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 	if index == 0 {
 		return
@@ -88,7 +128,7 @@ func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 		g.nodesVisited++
 
 		if reverse {
-			fmt.Printf("%d ", index)
+			count++
 		}
 	}
 
@@ -109,6 +149,9 @@ func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 		if !reverse {
 			// Push to stack since all neighbors were visited
 			stack.Push(index)
+		} else {
+			insertPathLength(count)
+			count = 0
 		}
 
 		g.dfsVisit(node.Previous, true, reverse)
@@ -131,14 +174,13 @@ func (g *Graph) Dfs(reverse bool) {
 
 // Operations
 
-func (g *Graph) PrintSCC() {
+func (g *Graph) PrintMaxSCCs() {
 	for !stack.IsEmpty() {
 		v, _ := stack.Pop()
 		if !g.Nodes[v].Visited {
-			fmt.Printf("Component %d: \n", numComponents)
+			count = 0
 			g.dfsVisit(v, false, true)
-			numComponents++
-			fmt.Println("")
 		}
 	}
+	fmt.Println(maxFiveSCC)
 }
