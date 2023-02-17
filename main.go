@@ -9,46 +9,41 @@ import (
 
 func main() {
 	start := time.Now()
-	name := "./data/SCC4.txt"
+	fileName := "./data/SCC4.txt"
+	// Get file name from arguments
 	if len(os.Args) > 1 {
-		name = "./data/" + os.Args[1]
+		fileName = "./data/" + os.Args[1]
 	}
 
-	nr, lisnod := src.ReadFile(name, start)
+	lenght, nodesList := src.ReadFile(fileName, start)
 
 	elapsed := time.Since(start)
 	fmt.Printf("Reading took %s\n", elapsed)
-	fmt.Printf("Input %10d  Edges %10d Nodes\n", len(lisnod), nr)
+	fmt.Printf("Input %10d  Edges %10d Nodes\n", len(nodesList), lenght)
 
-	pg := new(src.Graph)
-	pg.Nodes = make([]*src.Node, nr+1)
-	pg.CreateGraph(lisnod, false)
+	// Create graph G
+	graph := new(src.Graph)
+	graph.Nodes = make([]*src.Node, lenght+1)
+	graph.CreateGraph(nodesList, false)
 	elapsed = time.Since(start)
-	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
+	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
 
-	//pg.Display()
-
-	pg.Dfs(false)
+	graph.Dfs(false)
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)
 
-	//src.ListOrder(pg)
-
-	pgr := new(src.Graph)
-	pgr.Nodes = make([]*src.Node, nr+1)
-	pgr.CreateGraph(lisnod, true)
+	// Create reversed graph G_rev
+	reversedGraph := new(src.Graph)
+	reversedGraph.Nodes = make([]*src.Node, lenght+1)
+	reversedGraph.CreateGraph(nodesList, true)
 	elapsed = time.Since(start)
-	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
+	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
 
-	pgr.PrintSCC()
+	// Print SCCs
+	reversedGraph.PrintSCC()
 
-	//pgr.Display()
-
-	//pgr.Dfs(true)
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)
 	elapsed = time.Since(start)
-	//    findLeader(pgr)
-	//src.ListTree(pgr)
-	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
+	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
 }
