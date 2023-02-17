@@ -91,34 +91,11 @@ func insertPathLength(count uint) {
 			}
 		}
 	}
-
-	//assigned := false
-	//for idx, v := range maxFiveSCC {
-	//	if idx == 0 {
-	//		if count > v && count >= maxFiveSCC[1] {
-	//			maxFiveSCC[0] = count
-	//			assigned = true
-	//		}
-	//	} else if idx == len(maxFiveSCC)-1 {
-	//		if count > v {
-	//			maxFiveSCC[len(maxFiveSCC)-1] = count
-	//			assigned = true
-	//		}
-	//	} else {
-	//		if count > v && count <= maxFiveSCC[idx-1] && count >= maxFiveSCC[idx+1] {
-	//			maxFiveSCC[idx] = count
-	//			assigned = true
-	//		}
-	//	}
-	//
-	//	if assigned {
-	//		break
-	//	}
-	//}
 }
 
 func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 	if index == 0 {
+		insertPathLength(count)
 		return
 	}
 
@@ -149,11 +126,7 @@ func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 		if !reverse {
 			// Push to stack since all neighbors were visited
 			stack.Push(index)
-		} else {
-			insertPathLength(count)
-			count = 0
 		}
-
 		g.dfsVisit(node.Previous, true, reverse)
 	}
 	return

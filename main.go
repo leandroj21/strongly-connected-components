@@ -9,21 +9,21 @@ import (
 
 func main() {
 	start := time.Now()
-	fileName := "./data/SCC4.txt"
+	fileName := "./data/SCC.txt"
 	// Get file name from arguments
 	if len(os.Args) > 1 {
 		fileName = "./data/" + os.Args[1]
 	}
 
-	lenght, nodesList := src.ReadFile(fileName, start)
+	length, nodesList := src.ReadFile(fileName, start)
 
 	elapsed := time.Since(start)
 	fmt.Printf("Reading took %s\n", elapsed)
-	fmt.Printf("Input %10d  Edges %10d Nodes\n", len(nodesList), lenght)
+	fmt.Printf("Input %10d  Edges %10d Nodes\n", len(nodesList), length)
 
 	// Create graph G_rev first
 	graph := new(src.Graph)
-	graph.Nodes = make([]*src.Node, lenght+1)
+	graph.Nodes = make([]*src.Node, length+1)
 	graph.CreateGraph(nodesList, true)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
@@ -34,7 +34,7 @@ func main() {
 
 	// Create reversed graph G
 	reversedGraph := new(src.Graph)
-	reversedGraph.Nodes = make([]*src.Node, lenght+1)
+	reversedGraph.Nodes = make([]*src.Node, length+1)
 	reversedGraph.CreateGraph(nodesList, false)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(graph.Nodes), elapsed)
