@@ -22,31 +22,33 @@ func main() {
 
 	pg := new(src.Graph)
 	pg.Nodes = make([]*src.Node, nr+1)
-	pg.CreateGraph(lisnod, true)
+	pg.CreateGraph(lisnod, false)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
-	pg.Display()
+	//pg.Display()
 
 	pg.Dfs(false)
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)
 
-	src.ListOrder(pg)
+	//src.ListOrder(pg)
 
 	pgr := new(src.Graph)
 	pgr.Nodes = make([]*src.Node, nr+1)
-	pgr.CreateGraph(lisnod, false)
+	pgr.CreateGraph(lisnod, true)
 	elapsed = time.Since(start)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 
-	pgr.Display()
+	pgr.PrintSCC()
 
-	pgr.Dfs(true)
+	//pgr.Display()
+
+	//pgr.Dfs(true)
 	elapsed = time.Since(start)
 	fmt.Printf("Finish time %s \n", elapsed)
 	elapsed = time.Since(start)
 	//    findLeader(pgr)
-	src.ListTree(pgr)
+	//src.ListTree(pgr)
 	fmt.Printf("Created %10d Nodes  %s\n", len(pg.Nodes), elapsed)
 }

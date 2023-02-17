@@ -5,10 +5,9 @@ import (
 )
 
 var (
-	tree []int
-	// To implement the decreasing order or processing in the algorithm
-	// Todo: operations with stack
-	stack Stack
+	tree          []int
+	stack         Stack
+	numComponents int
 )
 
 type intTuple [2]int
@@ -78,7 +77,7 @@ func (g *Graph) Display() {
 }
 
 // Todo: implement reverse DFS
-func (g *Graph) depthSearch(index int, rollback, reverse bool) {
+func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 	if index == 0 {
 		return
 	}
@@ -87,6 +86,10 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 	if !rollback {
 		g.Nodes[index].Visited = true
 		g.nodesVisited++
+
+		if reverse {
+			fmt.Printf("%d ", index)
+		}
 	}
 
 	// Look for the next node
@@ -97,16 +100,18 @@ func (g *Graph) depthSearch(index int, rollback, reverse bool) {
 
 			// Continue to the next node
 			g.Nodes[neighbor].Previous = index
-			g.depthSearch(neighbor, false, reverse)
+			g.dfsVisit(neighbor, false, reverse)
 		}
 	}
 
 	// Go back to the previous node
 	if allVisited {
-		// Push to stack since all neighbors were visited
-		stack.Push(index)
+		if !reverse {
+			// Push to stack since all neighbors were visited
+			stack.Push(index)
+		}
 
-		g.depthSearch(node.Previous, true, reverse)
+		g.dfsVisit(node.Previous, true, reverse)
 	}
 	return
 }
@@ -119,21 +124,21 @@ func (g *Graph) Dfs(reverse bool) {
 		}
 
 		if !node.Visited {
-			g.depthSearch(idx, false, reverse)
+			g.dfsVisit(idx, false, reverse)
 		}
 	}
 }
 
 // Operations
 
-func ListOrder(pg *Graph) {
-
-}
-
-func FindLeader(g *Graph) {
-
-}
-
-func ListTree(pg *Graph) {
-
+func (g *Graph) PrintSCC() {
+	for !stack.IsEmpty() {
+		v, _ := stack.Pop()
+		if !g.Nodes[v].Visited {
+			fmt.Printf("Component %d: \n", numComponents)
+			g.dfsVisit(v, false, true)
+			numComponents++
+			fmt.Println("")
+		}
+	}
 }

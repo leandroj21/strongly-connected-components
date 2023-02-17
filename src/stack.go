@@ -23,11 +23,11 @@ func (stack *Stack) Pop() (int, bool) {
 	}
 
 	// The element to extract will be the final one
-	indexToExtract := len((*stack).items) - 1
-	element := (*stack).items[indexToExtract]
+	indexToExtract := len(stack.items) - 1
+	element := stack.items[indexToExtract]
 
 	// Remove the element from the stack
-	(*stack).items = (*stack).items[:indexToExtract]
+	stack.items = stack.items[:indexToExtract]
 
 	return element, true
 }
