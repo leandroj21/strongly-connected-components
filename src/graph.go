@@ -95,7 +95,10 @@ func insertPathLength(count uint) {
 
 func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 	if index == 0 {
-		insertPathLength(count)
+		if reverse {
+			// Insert path length into the max SCCs array
+			insertPathLength(count)
+		}
 		return
 	}
 
