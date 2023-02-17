@@ -9,7 +9,7 @@ import (
 
 func main() {
 	start := time.Now()
-	fileName := "./data/SCC.txt"
+	fileName := "./data/SCC5.txt"
 	// Get file name from arguments
 	if len(os.Args) > 1 {
 		fileName = "./data/" + os.Args[1]

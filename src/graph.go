@@ -2,15 +2,16 @@ package src
 
 import (
 	"fmt"
+	"sort"
 )
 
 type intTuple [2]int
 
 var (
-	count      uint
-	maxFiveSCC [5]uint
+	count      int
+	maxFiveSCC [5]int
 	// [index, value]
-	minimumSCC [2]uint = [2]uint{0, 0}
+	minimumSCC [2]int = [2]int{0, 0}
 	stack      Stack
 )
 
@@ -79,15 +80,15 @@ func (g *Graph) Display() {
 }
 
 // insertPathLength in the five-elements array to save the max SCC
-func insertPathLength(count uint) {
+func insertPathLength(count int) {
 	if count > minimumSCC[1] {
 		maxFiveSCC[minimumSCC[0]] = count
 
 		// Update minimum
-		minimumSCC = [2]uint{0, maxFiveSCC[0]}
+		minimumSCC = [2]int{0, maxFiveSCC[0]}
 		for idx, v := range maxFiveSCC {
 			if v < minimumSCC[1] {
-				minimumSCC = [2]uint{uint(idx), v}
+				minimumSCC = [2]int{idx, v}
 			}
 		}
 	}
@@ -158,5 +159,8 @@ func (g *Graph) PrintMaxSCCs() {
 			g.dfsVisit(v, false, true)
 		}
 	}
+
+	// Sort in decreasing order
+	sort.Sort(sort.Reverse(sort.IntSlice(maxFiveSCC[:])))
 	fmt.Println(maxFiveSCC)
 }
