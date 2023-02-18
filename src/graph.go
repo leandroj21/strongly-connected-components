@@ -2,16 +2,17 @@ package src
 
 import (
 	"fmt"
-	"sort"
 )
 
 type intTuple [2]int
 
+const maxAmountOfSCCs = 5
+
 var (
 	count      int
-	maxFiveSCC [5]int
+	maxFiveSCC [maxAmountOfSCCs]int
 	// [index, value]
-	minimumSCC [2]int = [2]int{0, 0}
+	minimumSCC = [2]int{0, 0}
 	stack      Stack
 )
 
@@ -149,18 +150,23 @@ func (g *Graph) Dfs(reverse bool) {
 	}
 }
 
-// Operations
+func (g *Graph) GetMaxSCCs(edgesList []intTuple, amountOfNodes int) [maxAmountOfSCCs]int {
+	// Run DFS
+	g.Dfs(false)
 
-func (g *Graph) PrintMaxSCCs() {
+	// Create reversed graph G
+	reversedGraph := new(Graph)
+	reversedGraph.Nodes = make([]*Node, amountOfNodes+1)
+	reversedGraph.CreateGraph(edgesList, false)
+
+	// Pop one by one to make DFS to the top of stack
 	for !stack.IsEmpty() {
 		v, _ := stack.Pop()
-		if !g.Nodes[v].Visited {
+		if !reversedGraph.Nodes[v].Visited {
 			count = 0
-			g.dfsVisit(v, false, true)
+			reversedGraph.dfsVisit(v, false, true)
 		}
 	}
 
-	// Sort in decreasing order
-	sort.Sort(sort.Reverse(sort.IntSlice(maxFiveSCC[:])))
-	fmt.Println(maxFiveSCC)
+	return maxFiveSCC
 }
