@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 )
 
 // ReadFile reads a text file to extract the nodes list of it
-func ReadFile(name string, start time.Time) (maxvalue int, nodeList []intTuple) {
+func ReadFile(name string) (maxvalue int, nodeList []intTuple) {
 	file, err := os.Open(name)
 	if err != nil {
 		log.Fatal(err)
@@ -25,8 +24,6 @@ func ReadFile(name string, start time.Time) (maxvalue int, nodeList []intTuple) 
 		log.Fatal(err)
 	}
 	var anod intTuple
-	var i int
-	var elapsed time.Duration
 	for scanner.Scan() {
 		lineStr := scanner.Text()
 		_, err2 := fmt.Sscanf(lineStr, "%d %d", &anod[0], &anod[1])
@@ -39,11 +36,6 @@ func ReadFile(name string, start time.Time) (maxvalue int, nodeList []intTuple) 
 		}
 		if maxvalue < anod[1] {
 			maxvalue = anod[1]
-		}
-		i++
-		if i%100000 == 0 {
-			elapsed = time.Since(start)
-			fmt.Printf("%8d %v %8d %8d \n", i, elapsed, anod[0], anod[1])
 		}
 	}
 	return
