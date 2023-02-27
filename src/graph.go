@@ -24,8 +24,7 @@ type Node struct {
 }
 
 type Graph struct {
-	Nodes        []*Node
-	nodesVisited int
+	Nodes []*Node
 }
 
 // createNode create a node in the graph
@@ -107,7 +106,6 @@ func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 	node := g.Nodes[index]
 	if !rollback {
 		g.Nodes[index].Visited = true
-		g.nodesVisited++
 
 		if reverse {
 			count++
