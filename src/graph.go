@@ -136,21 +136,21 @@ func (g *Graph) dfsVisit(index int, rollback, reverse bool) {
 }
 
 // Dfs of the graph
-func (g *Graph) Dfs(reverse bool) {
+func (g *Graph) Dfs() {
 	for idx, node := range g.Nodes {
 		if node == nil {
 			continue
 		}
 
 		if !node.Visited {
-			g.dfsVisit(idx, false, reverse)
+			g.dfsVisit(idx, false, false)
 		}
 	}
 }
 
 func (g *Graph) GetMaxSCCs(edgesList []intTuple, amountOfNodes int) [maxAmountOfSCCs]int {
 	// Run DFS
-	g.Dfs(false)
+	g.Dfs()
 
 	// Create reversed graph G
 	reversedGraph := new(Graph)
